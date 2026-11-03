@@ -90,7 +90,8 @@ const R=n=>'₹'+(Math.round(n*100)/100);
 
 const ALG={fcfs:{n:'FCFS (baseline)'},sjf:{n:'SJF (baseline)'},prio:{n:'Priority + Arrival (baseline)'},exact:{n:'Exact Search (baseline)'},energy:{n:'Energy-Aware Consolidation'},gpu_aware:{n:'GPU Resource-Aware Placement'},genetic:{n:'Genetic Algorithm'},nsga2:{n:'NSGA-II Pareto'}};
 const snapshot=()=>JSON.parse(JSON.stringify(S));
-async function api(path,body){let res;try{res=await fetch('/api/'+path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)})}catch(e){throw new Error('cannot reach the server. Run "npm start" and open http://localhost:3000')}
+async function api(path,body){let res;try{res=await fetch('/api/'+path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)})}catch(e){const err=new Error('server cannot be reached right now');err.isNetwork=true;throw err}
+if([502,503,504].includes(res.status)){const err=new Error('server cannot be reached right now');err.isNetwork=true;throw err}
 const data=await res.json().catch(()=>({}));if(!res.ok)throw new Error(data.error||res.statusText);return data}
 function jobsV(){return`<h2>Tasks</h2><p class="s">Times in minutes, cost in ₹. Edit cells directly; changes apply to the next run.</p>
 <div class="pn"><div class="row">${[['name','Name','text',''],['vram','VRAM (GB)','number',8],['rt','Runtime (min)','number',30],['arr','Arrival','number',0]].map(f=>`<label>${f[1]}<input id="n_${f[0]}" type="${f[2]}" value="${f[3]}"></label>`).join('')}
@@ -167,9 +168,9 @@ function addJob(){const g=k=>document.getElementById('n_'+k).value,name=g('name'
 function addSrv(){const name=document.getElementById('s_name').value.trim(),profile=document.getElementById('s_profile')?.value||'Illustrative balanced GPU';const profiles={'Illustrative balanced GPU':[16,120,1,900,24,280,90,24],'Illustrative compact GPU':[8,60,.55,420,12,150,48,15],'Illustrative high-capacity GPU':[32,260,2,1600,48,480,135,30]};if(!name){msg='Name is required.';return go('servers')}if(S.servers.some(s=>s.name.toLowerCase()===name.toLowerCase())){msg='A node with that name already exists.';return go('servers')}const p=profiles[profile];S.servers.push(hw(++uid,name,...p));msg='';go('servers')}
 function ed(w,id,k,v){const o=S[w].find(x=>x.id===id);if(!o)return;const numeric=['vram','rt','arr','cost',...JOB_FIELDS.map(f=>f[0]),...SERVER_FIELDS.map(f=>f[0])];if(numeric.includes(k)&&v!==null&&(!Number.isFinite(v)||v<0||(['vram','rt','compute_capacity','memory_bandwidth','pcie_bandwidth'].includes(k)&&v===0))){alert('Invalid numeric value – change not applied.');return go(tab)}if(k==='initial_state'&&!['OFF','IDLE','LOW_POWER','ACTIVE'].includes(v))return;o[k]=v}
 function requestOptions(){const weight=(id,fallback)=>{const v=Number(document.getElementById(id)?.value);return Number.isFinite(v)&&v>=0?v:fallback};return{seed:seedValue,population_size:Math.max(4,Math.min(100,+document.getElementById('pop')?.value||24)),generations:Math.max(1,Math.min(100,+document.getElementById('gens')?.value||25)),time_limit_seconds:Math.max(.05,Math.min(10,+document.getElementById('limit')?.value||2)),planning_horizon_minutes:Math.max(1,+document.getElementById('horizon')?.value||120),weights:{energy:weight('w_energy',1),cost:weight('w_cost',1),makespan:weight('w_span',.5),waiting:weight('w_wait',.5),priority:weight('w_priority',1)}}}
-async function doRun(){const k=document.getElementById('alg').value;seedValue=+(document.getElementById('seed')?.value||seedValue);try{run=await api('run',{algo:k,objective:document.getElementById('obj')?.value||obj,options:requestOptions(),snapshot:snapshot()})}catch(e){run=null;msg='Solver error: '+e.message}go('opt')}
-async function doCmp(){try{cmp=await api('compare',{objective:document.getElementById('obj')?.value||obj,options:{seed:seedValue,population_size:16,generations:12,time_limit_seconds:1,planning_horizon_minutes:120},snapshot:snapshot()})}catch(e){cmp=null;msg='Solver error: '+e.message}go('cmp')}
-async function doTr(){tH=+document.getElementById('th').value||60;try{trRes=await api('transport',{capacity:tH,snapshot:snapshot()})}catch(e){trRes=null;msg='Solver error: '+e.message}go('tr',1)}
+async function doRun(){const k=document.getElementById('alg').value;seedValue=+(document.getElementById('seed')?.value||seedValue);try{run=await api('run',{algo:k,objective:document.getElementById('obj')?.value||obj,options:requestOptions(),snapshot:snapshot()})}catch(e){run=null;msg=e.isNetwork?e.message:'Solver error: '+e.message;if(e.isNetwork)toast(e.message)}go('opt')}
+async function doCmp(){try{cmp=await api('compare',{objective:document.getElementById('obj')?.value||obj,options:{seed:seedValue,population_size:16,generations:12,time_limit_seconds:1,planning_horizon_minutes:120},snapshot:snapshot()})}catch(e){cmp=null;msg=e.isNetwork?e.message:'Solver error: '+e.message;if(e.isNetwork)toast(e.message)}go('cmp')}
+async function doTr(){tH=+document.getElementById('th').value||60;try{trRes=await api('transport',{capacity:tH,snapshot:snapshot()})}catch(e){trRes=null;msg=e.isNetwork?e.message:'Solver error: '+e.message;if(e.isNetwork)toast(e.message)}go('tr',1)}
 
 
 const q=id=>document.getElementById(id);
@@ -184,7 +185,7 @@ if(!name)er='Name is required.';else if(!(vram>0))er='VRAM must be greater than 
 if(er){q('t_err').textContent=er;return}
 S.jobs.push({id:++uid,name,vram,rt,pri:g('pri'),arr,job_type:g('type'),compute_demand:+g('compute'),memory_bandwidth_demand:+g('mem'),iterations:+g('iter'),sharing:g('share')==='true'});q('t_name').value='';closeTM();toast('Task "'+name+'" added');if(q('ws').classList.contains('open')&&tab==='jobs')go('jobs');else updC()};
 q('add').onclick=openTM;q('tc').onclick=closeTM;q('wx').onclick=closeWS;
-q('rst').onclick=()=>{if(confirm('Reset to the demo workload and servers?')){S=seed();run=cmp=null;go(tab);toast('Demo reset')}};
+if(q('rst'))q('rst').onclick=()=>{if(confirm('Reset to the demo workload and servers?')){S=seed();run=cmp=null;go(tab);toast('Demo reset')}};
 document.addEventListener('click',e=>{const o=e.target.closest('[data-open]');if(o){e.preventDefault();openWS(o.dataset.open)}else if(e.target.closest('[data-close]'))closeWS();else if(e.target===q('tm'))closeTM()});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeTM();closeWS()}});
 go('jobs');
