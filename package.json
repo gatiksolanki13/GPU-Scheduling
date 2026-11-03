@@ -1,0 +1,13 @@
+{
+  "name": "gpu-scheduler",
+  "version": "1.0.0",
+  "description": "GPU job scheduler with an Express server and Python algorithms",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test:api": "node --test tests/test_api_validation.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}

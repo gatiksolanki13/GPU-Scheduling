@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GPU Scheduler</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Press+Start+2P&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="bg">
+<svg viewBox="0 0 1400 760" preserveAspectRatio="xMidYMin slice" aria-hidden="true">
+<defs>
+<linearGradient id="ag" x1="0" x2="1"><stop offset="0" stop-color="#2fe39a" stop-opacity="0"/><stop offset=".35" stop-color="#3ff0ad" stop-opacity=".9"/><stop offset=".5" stop-color="#b9ffe3" stop-opacity="1"/><stop offset=".65" stop-color="#3ff0ad" stop-opacity=".9"/><stop offset="1" stop-color="#2fe39a" stop-opacity="0"/></linearGradient>
+<linearGradient id="pg" x1="0" x2="1"><stop offset="0" stop-color="#2fe39a" stop-opacity="0"/><stop offset="1" stop-color="#d6fff0"/></linearGradient>
+</defs>
+
+<g class="arc-a">
+<path class="arc glow" d="M-80 215 Q700 470 1480 215" stroke="url(#ag)" stroke-width="10"/>
+<path class="arc" d="M-80 215 Q700 470 1480 215" stroke="url(#ag)" stroke-width="2"/>
+<path class="arc" d="M-80 240 Q700 500 1480 240" stroke="url(#ag)" stroke-width="1" opacity=".5"/>
+<path class="arc" d="M-80 190 Q700 440 1480 190" stroke="url(#ag)" stroke-width="1" opacity=".4"/>
+</g>
+<g class="arc-b">
+<path class="arc glow" d="M-80 640 Q700 140 1480 640" stroke="url(#ag)" stroke-width="10"/>
+<path class="arc" d="M-80 640 Q700 140 1480 640" stroke="url(#ag)" stroke-width="2"/>
+<path class="arc" d="M-80 610 Q700 115 1480 610" stroke="url(#ag)" stroke-width="1" opacity=".45"/>
+<path class="arc" d="M-80 670 Q700 170 1480 670" stroke="url(#ag)" stroke-width="1" opacity=".35"/>
+</g>
+
+<g id="tr">
+<path class="trace" d="M652 120 H520 L470 160 H210"/>
+<path class="trace" d="M652 130 H560 L520 168 H300 L262 205 H120"/>
+<path class="trace" d="M748 120 H880 L930 160 H1190"/>
+<path class="trace" d="M748 130 H840 L880 168 H1100 L1138 205 H1280"/>
+<path class="trace" d="M700 172 V215"/>
+<path class="pulse" d="M652 120 H520 L470 160 H210" style="animation-delay:0s"/>
+<path class="pulse" d="M652 130 H560 L520 168 H300 L262 205 H120" style="animation-delay:1.2s"/>
+<path class="pulse" d="M748 120 H880 L930 160 H1190" style="animation-delay:.6s"/>
+<path class="pulse" d="M748 130 H840 L880 168 H1100 L1138 205 H1280" style="animation-delay:1.8s"/>
+</g>
+<g>
+<rect class="node" x="190" y="146" width="28" height="28" rx="7"/><rect class="node" x="100" y="191" width="28" height="28" rx="7"/>
+<rect class="node" x="1182" y="146" width="28" height="28" rx="7"/><rect class="node" x="1272" y="191" width="28" height="28" rx="7"/>
+</g>
+</svg>
+</div>
+
+<nav>
+<div class="logo" data-close style="cursor:pointer">GPU<span>SCHED</span></div>
+<div class="menu"><a href="#" data-open="jobs">Tasks</a><a href="#" data-open="servers">GPU Servers</a><a href="#" data-open="opt">Optimize</a><a href="#" data-open="cmp">Compare</a><a href="#" data-open="tr">VAM + MODI</a></div>
+<div class="right"><button class="btn" id="rst">Reset Demo</button><button class="btn w" data-open="opt">Optimize</button></div>
+</nav>
+
+<main>
+<div class="chip"><canvas id="gpu"></canvas><b>GPU</b></div>
+<h1>Schedule GPU Jobs</h1>
+<p class="sub">Queue your tasks, pick an objective, and let the scheduler fill your GPUs.</p>
+<button class="cta" id="add"><i>+</i>Add Task</button>
+<div class="pre" id="stat"></div>
+<div class="cards">
+<div class="card" data-open="jobs"><em>&#8599;</em><span>Task<br>Queue</span></div>
+<div class="card" data-open="servers"><em>&#8599;</em><span>GPU<br>Servers</span></div>
+<div class="card" data-open="cmp"><em>&#8599;</em><span>Compare<br>Methods</span></div>
+</div>
+</main>
+
+<div id="ws" role="dialog" aria-label="GPU Scheduler workspace"><div class="wh"><div class="wtop"><div class="brand">GPU_SCHED<small>cluster console v1.0</small></div><div class="wtabs"><button data-t="jobs">Tasks</button><button data-t="servers">GPU Servers</button><button data-t="opt">Optimize &amp; Results</button><button data-t="cmp">Compare All</button><button data-t="tr">VAM + MODI</button></div></div><div class="wbot"><div class="sys"><p id="sg"></p><p>uplink: stable</p><p id="clk"></p></div><button class="btn" id="wx">Exit</button></div></div><section id="v"></section></div>
+<div id="wsb"></div>
+<div id="tm"><form class="tbox" id="tf" autocomplete="off"><h3>Add Task</h3><p>Times in minutes.</p>
+<div class="g2"><label class="full">Name<input id="t_name" type="text" placeholder="e.g. Model Training"></label><label>Workload type<select id="t_type"><option>Training<option>Inference<option>Batch Processing<option>Memory Intensive<option>Compute Intensive</select></label><label>VRAM peak (GB)<input id="t_vram" type="number" value="8"></label><label>Runtime estimate (min)<input id="t_rt" type="number" value="30"></label><label>Priority<select id="t_pri"><option>High<option>Medium<option>Low</select></label><label>Compute demand<input id="t_compute" type="number" step="any" value="0.4" title="Normalized compute capacity requirement"></label><label>Memory bandwidth (GB/s)<input id="t_mem" type="number" step="any" value="100"></label><label>Iterations<input id="t_iter" type="number" step="any" value="1"></label><label>Arrival<input id="t_arr" type="number" value="0"></label><label>Allow simulated sharing<select id="t_share"><option value="true">Yes</option><option value="false">No</option></select></label></div>
+<div class="terr" id="t_err"></div><div class="tact"><button type="button" class="btn" id="tc">Cancel</button><button type="submit" class="btn w">Add Task</button></div></form></div>
+<div id="toast"></div>
+<script src="app.js"></script>
+</body>
+</html>

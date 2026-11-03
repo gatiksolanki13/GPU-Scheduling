@@ -1,0 +1,77 @@
+{
+  "comparison_experiment": {
+    "objective": "balanced",
+    "options_passed_to_run_algorithm": {
+      "seed": 7,
+      "population_size": 12,
+      "generations": 4,
+      "time_limit_seconds": 1,
+      "planning_horizon_minutes": 120
+    },
+    "custom_objective_weights_supplied": false
+  },
+  "algorithms": {
+    "fcfs": {
+      "display_name": "FCFS",
+      "effective_settings": "Arrival then integer ID order; seed/population/generations/time limit ignored; objective has no placement tie-break effect."
+    },
+    "sjf": {
+      "display_name": "SJF",
+      "effective_settings": "Runtime then integer ID order; seed/population/generations/time limit ignored; objective has no placement tie-break effect."
+    },
+    "prio": {
+      "display_name": "Priority + arrival",
+      "effective_settings": "Descending priority tier, then arrival and ID; seed/population/generations/time limit ignored."
+    },
+    "exact": {
+      "display_name": "Exact Search",
+      "effective_settings": "Exhaustive GPU assignment search with fixed per-GPU priority/arrival order; time limit 1 second; planning horizon 120 minutes; objective balanced score weights cost=1, energy=0.02, makespan=10, waiting=1, priority=1."
+    },
+    "energy": {
+      "display_name": "Energy-Aware Consolidation",
+      "effective_settings": "GPU-aware placement with consolidation enabled; consumes planning horizon 120 minutes; seed/population/generations/time limit ignored; consolidation candidate score favors already-used/ACTIVE GPUs."
+    },
+    "gpu_aware": {
+      "display_name": "GPU Resource-Aware Placement",
+      "effective_settings": "GPU-aware placement; consumes planning horizon 120 minutes; seed/population/generations/time limit ignored; balanced greedy score."
+    },
+    "genetic": {
+      "display_name": "Genetic Algorithm",
+      "population_size": 12,
+      "requested_generations": 4,
+      "execution_limit_seconds": 1,
+      "planning_horizon_minutes": 120,
+      "seed_for_comparison": 7,
+      "selection": "Tournament selection, up to 3 candidates per parent; top 2 elites copied.",
+      "crossover": "Applied to every child: prefix-and-fill permutation crossover; GPU assignment preference inherited independently per job with 0.5 probability from either parent.",
+      "mutation": {
+        "job_order_swap_probability": 0.35,
+        "gpu_preference_mutation_probability": 0.35
+      },
+      "fitness": "Balanced default GA weights: energy=1, cost=1, makespan=0.5, waiting=0.5, priority=1; unscheduled jobs have a large penalty."
+    },
+    "nsga2": {
+      "display_name": "NSGA-II Pareto",
+      "population_size": 12,
+      "requested_generations": 4,
+      "execution_limit_seconds": 1,
+      "planning_horizon_minutes": 120,
+      "seed_for_comparison": 7,
+      "selection": "Binary tournament by rank/crowding; environmental selection from parent+offspring; scheduled-job count has lexicographic priority.",
+      "crossover": "Applied to every child: prefix-and-fill permutation crossover; GPU assignment preference inherited independently per job with 0.5 probability from either parent.",
+      "mutation": {
+        "job_order_swap_probability": 0.35,
+        "gpu_preference_mutation_probability": 0.35
+      },
+      "objectives": [
+        "energy_kwh",
+        "operating_cost_inr",
+        "makespan_minutes",
+        "average_waiting_minutes",
+        "priority_weighted_wait_plus_unscheduled_penalty"
+      ],
+      "display_solution": "With objective=balanced, final selector falls back to cost; the selected candidate remains among maximum scheduled-job-count candidates."
+    }
+  },
+  "note": "The same options object is passed to all eight algorithms. The settings each method actually consumes are documented above; omitted/irrelevant settings are not implied to affect a method."
+}

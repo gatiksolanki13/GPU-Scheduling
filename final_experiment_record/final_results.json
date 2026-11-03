@@ -1,0 +1,351 @@
+{
+  "recorded_at": "2026-11-03",
+  "comparison_workload": "six_job_demo_snapshot",
+  "objective": "balanced",
+  "comparison_options": {
+    "seed": 7,
+    "population_size": 12,
+    "generations": 4,
+    "time_limit_seconds": 1,
+    "planning_horizon_minutes": 120
+  },
+  "comparison_results": [
+    {
+      "algorithm": "FCFS",
+      "scheduled": 6,
+      "unscheduled": 0,
+      "energy_kwh": 0.9363955811617575,
+      "operating_cost_inr": 727.4911646492941,
+      "makespan_minutes": 98.37254901960785,
+      "average_waiting_minutes": 11.874183006535949,
+      "gpu_utilization_wall_clock": 0.693367327421543,
+      "gpu_busy_job_time_utilization": 0.693367327421543,
+      "execution_time_ms": 0.6231998559087515,
+      "scheduled_job_ids": [
+        1,
+        2,
+        3,
+        5,
+        4,
+        6
+      ]
+    },
+    {
+      "algorithm": "SJF",
+      "scheduled": 6,
+      "unscheduled": 0,
+      "energy_kwh": 0.7938695969498909,
+      "operating_cost_inr": 624.5509567755992,
+      "makespan_minutes": 93.27535947712417,
+      "average_waiting_minutes": 17.217058823529413,
+      "gpu_utilization_wall_clock": 0.6297709665130466,
+      "gpu_busy_job_time_utilization": 0.6297709665130466,
+      "execution_time_ms": 0.45759999193251133,
+      "scheduled_job_ids": [
+        2,
+        6,
+        3,
+        1,
+        4,
+        5
+      ]
+    },
+    {
+      "algorithm": "Priority + arrival",
+      "scheduled": 6,
+      "unscheduled": 0,
+      "energy_kwh": 0.9363955811617575,
+      "operating_cost_inr": 727.4911646492941,
+      "makespan_minutes": 98.37254901960785,
+      "average_waiting_minutes": 11.874183006535949,
+      "gpu_utilization_wall_clock": 0.693367327421543,
+      "gpu_busy_job_time_utilization": 0.693367327421543,
+      "execution_time_ms": 0.426500104367733,
+      "scheduled_job_ids": [
+        1,
+        2,
+        5,
+        3,
+        4,
+        6
+      ]
+    },
+    {
+      "algorithm": "Exact Search",
+      "scheduled": 6,
+      "unscheduled": 0,
+      "energy_kwh": 0.9631700935121523,
+      "operating_cost_inr": 727.7053607480972,
+      "makespan_minutes": 73.45183006535947,
+      "average_waiting_minutes": 12.174110384894698,
+      "gpu_utilization_wall_clock": 0.9697809024111532,
+      "gpu_busy_job_time_utilization": 0.9697809024111532,
+      "execution_time_ms": 63.71080013923347,
+      "scheduled_job_ids": [
+        2,
+        5,
+        3,
+        4,
+        6,
+        1
+      ]
+    },
+    {
+      "algorithm": "Energy-Aware Consolidation",
+      "scheduled": 6,
+      "unscheduled": 0,
+      "energy_kwh": 0.5640908333333333,
+      "operating_cost_inr": 440.39412666666664,
+      "makespan_minutes": 127.0938,
+      "average_waiting_minutes": 37.26433333333333,
+      "gpu_utilization_wall_clock": 0.3333333333333333,
+      "gpu_busy_job_time_utilization": 0.5735231249150889,
+      "execution_time_ms": 2.910400042310357,
+      "scheduled_job_ids": [
+        1,
+        2,
+        5,
+        3,
+        4,
+        6
+      ]
+    },
+    {
+      "algorithm": "GPU Resource-Aware Placement",
+      "scheduled": 6,
+      "unscheduled": 0,
+      "energy_kwh": 0.8836687166666667,
+      "operating_cost_inr": 727.0693497333333,
+      "makespan_minutes": 79.688,
+      "average_waiting_minutes": 5.4870833333333335,
+      "gpu_utilization_wall_clock": 0.7984058662115584,
+      "gpu_busy_job_time_utilization": 0.987973095070776,
+      "execution_time_ms": 1.8692000303417444,
+      "scheduled_job_ids": [
+        2,
+        5,
+        1,
+        3,
+        4,
+        6
+      ]
+    },
+    {
+      "algorithm": "Genetic Algorithm",
+      "scheduled": 6,
+      "unscheduled": 0,
+      "energy_kwh": 0.8054070833333333,
+      "operating_cost_inr": 461.9794566666667,
+      "makespan_minutes": 134.4167,
+      "average_waiting_minutes": 17.656866666666666,
+      "gpu_utilization_wall_clock": 0.4587964144336232,
+      "gpu_busy_job_time_utilization": 0.6112873871574986,
+      "execution_time_ms": 103.63809997215867,
+      "generations_completed": 4,
+      "evaluations": 48,
+      "execution_limit_reached": false,
+      "scheduled_job_ids": [
+        2,
+        5,
+        4,
+        6,
+        3,
+        1
+      ]
+    },
+    {
+      "algorithm": "NSGA-II Pareto",
+      "scheduled": 6,
+      "unscheduled": 0,
+      "energy_kwh": 0.8054070833333333,
+      "operating_cost_inr": 461.9794566666667,
+      "makespan_minutes": 134.4167,
+      "average_waiting_minutes": 17.656866666666666,
+      "gpu_utilization_wall_clock": 0.4587964144336232,
+      "gpu_busy_job_time_utilization": 0.6112873871574986,
+      "execution_time_ms": 147.65820000320673,
+      "generations_completed": 4,
+      "evaluations": 60,
+      "execution_limit_reached": false,
+      "scheduled_job_ids": [
+        2,
+        5,
+        4,
+        6,
+        3,
+        1
+      ]
+    }
+  ],
+  "thirty_seed_experiments": {
+    "genetic": {
+      "n": 30,
+      "seeds": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29
+      ],
+      "all_jobs_scheduled_every_seed": true,
+      "generations_completed": [
+        4
+      ],
+      "evaluations_per_run": [
+        48
+      ],
+      "execution_limit_reached_runs": 0,
+      "metrics": {
+        "scheduled_jobs": {
+          "mean": 6,
+          "sample_stddev": 0
+        },
+        "unscheduled_jobs": {
+          "mean": 0,
+          "sample_stddev": 0
+        },
+        "energy_kwh": {
+          "mean": 0.801761085,
+          "sample_stddev": 0.09711063740627751
+        },
+        "operating_cost_inr": {
+          "mean": 572.1515920133334,
+          "sample_stddev": 68.703960331831
+        },
+        "makespan_minutes": {
+          "mean": 107.34447,
+          "sample_stddev": 19.084771847970018
+        },
+        "average_waiting_minutes": {
+          "mean": 12.173486666666665,
+          "sample_stddev": 4.757472719510334
+        },
+        "gpu_utilization_wall_clock": {
+          "mean": 0.5672899248208422,
+          "sample_stddev": 0.07851878856388664
+        },
+        "gpu_busy_job_time_utilization": {
+          "mean": 0.7955501681166142,
+          "sample_stddev": 0.14656600393809482
+        },
+        "execution_time_ms": {
+          "mean": 114.51256667884688,
+          "sample_stddev": 10.394785598108294
+        }
+      }
+    },
+    "nsga2": {
+      "n": 30,
+      "seeds": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29
+      ],
+      "all_jobs_scheduled_every_seed": true,
+      "generations_completed": [
+        4
+      ],
+      "evaluations_per_run": [
+        60
+      ],
+      "execution_limit_reached_runs": 0,
+      "metrics": {
+        "scheduled_jobs": {
+          "mean": 6,
+          "sample_stddev": 0
+        },
+        "unscheduled_jobs": {
+          "mean": 0,
+          "sample_stddev": 0
+        },
+        "energy_kwh": {
+          "mean": 0.7904640272222222,
+          "sample_stddev": 0.12908937231768375
+        },
+        "operating_cost_inr": {
+          "mean": 482.54078888444445,
+          "sample_stddev": 19.576555186497664
+        },
+        "makespan_minutes": {
+          "mean": 143.62698333333333,
+          "sample_stddev": 20.951275813396737
+        },
+        "average_waiting_minutes": {
+          "mean": 30.25009111111111,
+          "sample_stddev": 12.829207147735824
+        },
+        "gpu_utilization_wall_clock": {
+          "mean": 0.4230965914487584,
+          "sample_stddev": 0.07201048952950573
+        },
+        "gpu_busy_job_time_utilization": {
+          "mean": 0.5849525532483915,
+          "sample_stddev": 0.11274034567436264
+        },
+        "execution_time_ms": {
+          "mean": 156.3797633474072,
+          "sample_stddev": 28.001052264681856
+        }
+      }
+    }
+  },
+  "metric_notes": {
+    "gpu_utilization_wall_clock": "Simulator wall-clock active interval utilization, 0..1.",
+    "gpu_busy_job_time_utilization": "Busy-job-time utilization; can exceed wall-clock utilization with sharing.",
+    "operating_cost": "Simulator totalOperatingCost, including powered-time rental, electricity and transition fees.",
+    "execution_time_ms": "One measured call for each comparison algorithm; 30-run entries report sample mean and sample standard deviation."
+  },
+  "independent_verification": "Same workload comparison independently checked: unique scheduled IDs; arrival/wait and finish consistency; aggregate VRAM, compute and bandwidth limits; simulator energy totals and operating-cost decomposition matched direct recomputation."
+}

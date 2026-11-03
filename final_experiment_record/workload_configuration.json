@@ -1,0 +1,157 @@
+{
+  "experiment_name": "six_job_demo_snapshot",
+  "source": "tests/test_gpu_simulation.py::test_all_algorithms_schedule_feasible_six_job_demo_snapshot",
+  "jobs": [
+    {
+      "id": 1,
+      "name": "Model Training",
+      "job_type": "Training",
+      "vram_gb": 8,
+      "runtime_minutes": 30,
+      "priority": "High",
+      "arrival_minutes": 0,
+      "compute_demand": 0.55,
+      "memory_bandwidth_demand_gbps": 310,
+      "iterations": 1,
+      "sharing": true,
+      "compute_work": 30.0,
+      "memory_work_gb": 558000.0
+    },
+    {
+      "id": 2,
+      "name": "Vision Inference",
+      "job_type": "Inference",
+      "vram_gb": 4,
+      "runtime_minutes": 10,
+      "priority": "High",
+      "arrival_minutes": 0,
+      "compute_demand": 0.32,
+      "memory_bandwidth_demand_gbps": 90,
+      "iterations": 1,
+      "sharing": true,
+      "compute_work": 10.0,
+      "memory_work_gb": 54000.0
+    },
+    {
+      "id": 3,
+      "name": "Batch Embeddings",
+      "job_type": "Batch Processing",
+      "vram_gb": 12,
+      "runtime_minutes": 25,
+      "priority": "Medium",
+      "arrival_minutes": 0,
+      "compute_demand": 0.42,
+      "memory_bandwidth_demand_gbps": 260,
+      "iterations": 1,
+      "sharing": true,
+      "compute_work": 25.0,
+      "memory_work_gb": 390000.0
+    },
+    {
+      "id": 4,
+      "name": "Simulation Run",
+      "job_type": "Compute Intensive",
+      "vram_gb": 8,
+      "runtime_minutes": 40,
+      "priority": "Low",
+      "arrival_minutes": 5,
+      "compute_demand": 0.7,
+      "memory_bandwidth_demand_gbps": 120,
+      "iterations": 1,
+      "sharing": true,
+      "compute_work": 40.0,
+      "memory_work_gb": 288000.0
+    },
+    {
+      "id": 5,
+      "name": "Fine-tuning",
+      "job_type": "Memory Intensive",
+      "vram_gb": 16,
+      "runtime_minutes": 45,
+      "priority": "High",
+      "arrival_minutes": 0,
+      "compute_demand": 0.48,
+      "memory_bandwidth_demand_gbps": 520,
+      "iterations": 1,
+      "sharing": true,
+      "compute_work": 45.0,
+      "memory_work_gb": 1404000.0
+    },
+    {
+      "id": 6,
+      "name": "Nightly Export",
+      "job_type": "Batch Processing",
+      "vram_gb": 6,
+      "runtime_minutes": 18,
+      "priority": "Low",
+      "arrival_minutes": 12,
+      "compute_demand": 0.25,
+      "memory_bandwidth_demand_gbps": 180,
+      "iterations": 1,
+      "sharing": true,
+      "compute_work": 18.0,
+      "memory_work_gb": 194400.0
+    }
+  ],
+  "derived_model_fields": {
+    "compute_work": "When omitted, rt * iterations; values shown above are the normalized effective values.",
+    "memory_work_gb": "When omitted, memory_bandwidth_demand * rt * 60; values shown above are the normalized effective values.",
+    "deadline": "Not present in the experiment input; legacy deadline input is ignored."
+  },
+  "api_smoke_test_request_fixture": {
+    "purpose": "HTTP API smoke tests only; distinct from the six-job experiment workload.",
+    "base_jobs": [
+      {
+        "id": 1,
+        "name": "Feasible",
+        "vram_gb": 4,
+        "runtime_minutes": 5,
+        "priority": "High",
+        "arrival_minutes": 0,
+        "compute_demand": 0.3,
+        "memory_bandwidth_demand_gbps": 100,
+        "iterations": 1,
+        "sharing": true
+      },
+      {
+        "id": 2,
+        "name": "Too-Large",
+        "vram_gb": 32,
+        "runtime_minutes": 5,
+        "priority": "Low",
+        "arrival_minutes": 2,
+        "compute_demand": 0.2,
+        "memory_bandwidth_demand_gbps": 80,
+        "iterations": 1,
+        "sharing": true
+      }
+    ],
+    "base_gpu": {
+      "id": 1,
+      "name": "GPU-1",
+      "vram_gb": 16,
+      "rental_cost_per_hour_inr": 100,
+      "enabled": true,
+      "compute_capacity": 1.0,
+      "memory_bandwidth_gbps": 500,
+      "active_power_w": 250,
+      "idle_power_w": 70,
+      "low_power_w": 20,
+      "startup_energy_wh": 10,
+      "shutdown_energy_wh": 2,
+      "startup_delay_seconds": 30,
+      "shutdown_delay_seconds": 10,
+      "minimum_off_minutes": 2,
+      "initial_state": "ACTIVE",
+      "sharing_supported": true
+    },
+    "objective": "balanced",
+    "options": {
+      "seed": 7,
+      "population_size": 6,
+      "generations": 1,
+      "time_limit_seconds": 0.1,
+      "planning_horizon_minutes": 60
+    }
+  }
+}
